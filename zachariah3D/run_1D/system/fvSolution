@@ -1,0 +1,124 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    pAir
+    {
+        solver           PCG;
+        preconditioner   DIC;            // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+    Uair
+    {
+        solver           PBiCG;
+        preconditioner   DILU;           // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+    nIonsN
+    {
+        solver           PBiCG;
+        preconditioner   DILU;           // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+    nIonsP
+    {
+        solver           PBiCG;
+        preconditioner   DILU;           // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+    nPart
+    {
+        solver           PBiCG;
+        preconditioner   DILU;           // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+    phiE
+    {
+        solver           PCG;
+        preconditioner   DIC;            // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+/*
+    T
+    {
+	solver		 PBiCG;
+	preconditioner	 DILU;
+	tolerance	 1e-10;
+	relTol		 0.0;
+	minIter		 1;
+	maxIter		 5000;
+    }
+*/
+
+    T
+    {
+        solver           PCG;
+        preconditioner   DIC;            // Preconditioning => page: U-115
+        tolerance        1e-09;
+        relTol           0.0;
+        minIter          1;
+        maxIter          700;
+    }
+
+}
+
+PISO
+{
+    nIteration      0;
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 0;
+    pAirRefCell        0;
+    pAirRefValue       0;
+    pFuelRefCell        0;
+    pFuelRefValue       0;
+}
+
+
+relaxationFactors
+{
+    pAir            0.3;
+    Uair            0.7;
+    nIons           0.5;
+    nPart           0.5;
+}
+
+// ************************************************************************* //

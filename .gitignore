@@ -1,0 +1,77 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+*.DS_Store
+
+# Unused directories
+cavity/
+cavityClipped/
+cavityFine/
+cavityRAS/
+Furnace/
+heatExchanger/
+injectorPipe/
+pitzDaily/
+my_icoFoam/
+mu_icoFoam/
+zachariah3D-master/
+OpenFOAM-plus-master/
+
+
+
+*.gz
+log.*
+*.log
+*~
+processor*
+
+# for each case
+**/[0-9]*/
+!**/0/
+**/[0-9]*.[0-9]*
+**/VTK/
+**/config/
+**/output/
+**/libSrc/
+*.eMesh
+**/constant/polyMesh/
+**/constant/triSurface/
+!**/constant/polyMesh/blockMeshDict
+*.OpenFOAM
+
+# for complicated cases
+gamma[0-9]*_[0-9]*
+nPartNode[0-9]*
+NSati[0-9]*
+NSatk[0-9]*
+zeta[0-9]*

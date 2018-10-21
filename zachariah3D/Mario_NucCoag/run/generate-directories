@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+set -u
+trap "echo Script failed" EXIT
+
+#number of simulations ((n+1)th bin)
+	n=0
+	rm -rf size.txt
+
+#Subsitituted directory
+#	cp -a template "substituted" 
+
+#Pipe - feed the output of radiusAndConcentration into 
+echo size   concentration
+logNodes |
+    while read size concentration; do
+        echo $size   $concentration
+        let "n = n+1"
+
+	#Substituting the concentration value
+	sed "s/@concentration@/$concentration/" <"0/nPartNode$n" >"0/nPartNode$n.new" 
+	mv "0/nPartNode$n.new" "0/nPartNode$n"
+
+	#create a file for radius values
+	echo $size >> size.txt
+
+    done
+
+trap "" EXIT

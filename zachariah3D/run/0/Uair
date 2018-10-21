@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      Uair;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [ 0 1 -1 0 0 0 0 ];
+
+internalField   uniform (  0 0.0226329546 0 );//0.5lpm = 0.000008333333m^3/s / area, A = pi*(pi*0.04^2/4) = 0.00125663706 -> 0.131 for 1lpm 0.0066314557
+
+//0.01020223996
+//0.03400746654
+//0.06801493308
+//0.10202239962
+//0.13602986616
+//0.1700373327
+
+//0.01020223996
+//0.03400746654
+//0.06801493308
+//0.10202239962
+//0.13602986616
+//0.1700373327
+
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    outlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    lowerWall0
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    lowerWall1
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    lowerWall2
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    upperWall0
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    upperWall1
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    upperWall2
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    frontAndBack_half0
+    {
+        type            cyclic;
+    }
+    frontAndBack_half1
+    {
+        type            cyclic;
+    }
+}
+
+
+// ************************************************************************* //

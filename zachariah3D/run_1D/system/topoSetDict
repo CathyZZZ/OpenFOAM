@@ -1,0 +1,92 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    // nonIrradiated
+    {
+        name    nonIrradiated;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+           box (0 0.18 0) (0.1 1 0.1);
+        }
+    }
+
+    {
+        name    nonIrradiated;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set nonIrradiated;
+        }
+    }
+
+
+
+    //borderFace
+    {
+        name    borderFace;
+        type    faceSet;
+        action  new;
+        source  boxToFace;
+        sourceInfo
+        {
+           box (0 0.0239 0) (0.1 0.0241 0.1);
+        }
+    }
+
+    {
+        name    borderFace;
+        type    faceZoneSet;
+        action  new;
+        source  setToFaceZone;
+        sourceInfo
+        {
+            faceSet borderFace;
+        }
+    }
+
+    // porosity
+    {
+        name    porosity;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 -1 0) (0.1 10 0.1);
+        }
+    }
+    {
+        name    porosity;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set nonIrradiated;
+        }
+    }
+
+);
+
+// ************************************************************************* //

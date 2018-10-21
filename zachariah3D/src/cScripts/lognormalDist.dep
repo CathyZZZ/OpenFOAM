@@ -1,0 +1,6 @@
+$(OBJECTS_DIR)/lognormalDist.o: lognormalDist.dep
+lognormalDist.dep: lognormalDist.C
+$(OBJECTS_DIR)/lognormalDist.o: $(EXE_DEP)
+$(OBJECTS_DIR)/lognormalDist.o:
+	@SOURCE_DIR=.
+	SOURCE=lognormalDist.C ; $(Ctoo)

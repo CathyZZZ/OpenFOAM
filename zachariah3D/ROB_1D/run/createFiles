@@ -1,0 +1,42 @@
+#!/bin/bash
+
+file="./constant/transportProperties" #the file where you keep your string name
+nodes=$(grep "nodes" ./constant/transportProperties)        #the output of 'cat $file' is assigned to the $name variable
+nodes=${nodes%;*}  # retain the part before the colon
+nodes=${nodes##*]}
+
+#delete and copy
+	cd 0
+	rm -rf nPart*
+	rm -rf gamma1*
+	rm -rf zeta*
+
+
+#create nPartNode%
+	for (( i=0; i<nodes; i++ )) do
+		cp _nPart nPartNode$((i+1))
+		sed "s/@s@/Node$((i+1))/" <"nPartNode$((i+1))" >"nPartNode$((i+1)).new"
+		mv "nPartNode$((i+1)).new" "nPartNode$((i+1))"
+	done
+
+#create nPartNode%
+	for (( i=0; i<nodes; i++ )) do
+		cp _gamma1 gamma1_$((i+1))
+		sed "s/@s@/$((i+1))/" <"gamma1_$((i+1))" >"gamma1_$((i+1)).new"
+		mv "gamma1_$((i+1)).new" "gamma1_$((i+1))"
+	done
+
+#create nPartNode%
+	for (( i=0; i<nodes; i++ )) do
+		cp _zeta zeta$((i+1))
+		sed "s/@s@/$((i+1))/" <"zeta$((i+1))" >"zeta$((i+1)).new"
+		mv "zeta$((i+1)).new" "zeta$((i+1))"
+	done
+
+#create NSati%
+	for (( i=0; i<nodes; i++ )) do
+		cp _NSati NSati$((i+1))
+		sed "s/@s@/$((i+1))/" <"NSati$((i+1))" >"NSati$((i+1)).new"
+		mv "NSati$((i+1)).new" "NSati$((i+1))"
+	done
+

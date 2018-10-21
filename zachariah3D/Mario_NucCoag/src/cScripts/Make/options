@@ -1,0 +1,10 @@
+EXE_INC = -g \
+    -L$(FOAM_USER_LIBBIN)/include \
+    -I../libSrc/lnInclude \
+    -I$(LIB_SRC)/../../usr/include \
+    -I$(HOME)/include
+
+EXE_LIBS = \
+    -L$(FOAM_USER_LIBBIN)/lib \
+    -L$(HOME)/lib \
+    -L$(LIB_SRC)/../../usr/lib 

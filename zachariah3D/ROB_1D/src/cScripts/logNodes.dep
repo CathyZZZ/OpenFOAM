@@ -1,0 +1,6 @@
+$(OBJECTS_DIR)/logNodes.o: logNodes.dep
+logNodes.dep: logNodes.C
+$(OBJECTS_DIR)/logNodes.o: $(EXE_DEP)
+$(OBJECTS_DIR)/logNodes.o:
+	@SOURCE_DIR=.
+	SOURCE=logNodes.C ; $(Ctoo)

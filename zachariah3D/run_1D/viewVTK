@@ -1,0 +1,17 @@
+#!/bin/bash
+
+file="./constant/transportProperties" #the file where you keep your string name
+nodes=$(grep "nodes" ./constant/transportProperties)        #the output of 'cat $file' is assigned to the $name variable
+nodes=${nodes%;*}  # retain the part before the colon
+nodes=${nodes##*]}
+
+#foamToVTK -latestTime -fields '( pAir T Uair S pSat dpstar kstar nPartNode1 nPartNode2 nPartNode3 nPartNode4 nPartNode5 nPartNode6 nPartNode7 nPartNode8 nPartNode9 nPartNode10 nPartNode11 nPartNode12 nPartNode13 nPartNode14 nPartNode15 nPartNode16 nPartNode17  nPartNode18 nPartNode19 nPartNode20 nPartNode21 nPartNode22 nPartNode23 nPartNode24 nPartNode25 nPartNode26 nPartNode27 nPartNode28 nPartNode29 nPartNode30 nPartNode31 nPartNode32 nPartNode33 nPartNode34 nPartNode35 nPartNode36 nPartNode37 nPartNode38 nPartNode39 nPartNode40 )'
+
+
+foamToVTK -latestTime -fields '( pAir T Uair S pSat dpstar kstar nPartNode1 nPartNode2 nPartNode3 nPartNode4 nPartNode5 nPartNode6 nPartNode7 nPartNode8 nPartNode9 nPartNode10 nPartNode11 nPartNode12 nPartNode13 nPartNode14 nPartNode15 nPartNode16 nPartNode17  )'
+
+##create nPartNode%
+#	for (( i=0; i<nodes; i++ )) do
+#		foamToVTK -latestTime -fields '( nPartNode$((i+1)) )'
+#	done
+

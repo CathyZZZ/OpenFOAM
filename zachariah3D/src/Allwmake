@@ -1,0 +1,8 @@
+#!/bin/sh
+set -x
+
+( cd libSrc && ./Allwmake )
+( pwd )
+( cd appSrc && wmake )
+( pwd )
+( cd cScripts && wmake )
