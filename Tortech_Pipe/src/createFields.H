@@ -11,15 +11,15 @@ IOdictionary transportProperties
         IOobject::NO_WRITE
     )
 );
-
-dimensionedScalar mu (transportProperties.lookup("mu"));
-dimensionedScalar rhoAir (transportProperties.lookup("rho"));
-
-dimensionedScalar DT (transportProperties.lookup("DT"));
-
+dimensionedScalar dAir (transportProperties.lookup("dAir"));
+dimensionedScalar dp (transportProperties.lookup("dp"));
+dimensionedScalar R (transportProperties.lookup("R"));
+dimensionedScalar Na (transportProperties.lookup("Na"));
+dimensionedScalar BoltzConst  (transportProperties.lookup("BoltzConst"));
 
 Info<< "Creating Fields for Flow Calculation\n" << endl;
 //Info<< muAir << endl;
+
 volScalarField pAir
 (
  IOobject
@@ -37,33 +37,23 @@ volScalarField muAir
 (
  IOobject
  (
-  "mu",
+  "muAir",
   runTime.timeName(),
   mesh,
   IOobject::READ_IF_PRESENT,
-  IOobject::NO_WRITE
+  IOobject::AUTO_WRITE
+//  IOobject::NO_WRITE
   ),
- mesh,
- mu,
- zeroGradientFvPatchScalarField::typeName
+ mesh
+// mu,
+// zeroGradientFvPatchScalarField::typeName
  );
-muAir.correctBoundaryConditions();
+//muAir.correctBoundaryConditions();
 
-volScalarField rho
-(
- IOobject
- (
-  "rho",
-  runTime.timeName(),
-  mesh,
-  IOobject::READ_IF_PRESENT,
-  IOobject::NO_WRITE
-  ),
- mesh,
- rhoAir,
- zeroGradientFvPatchScalarField::typeName
- );
-muAir.correctBoundaryConditions();
+
+
+
+
 
 Info<< "Creating field Velocity" <<endl;
 volVectorField Uair
@@ -77,19 +67,6 @@ volVectorField Uair
   IOobject::AUTO_WRITE
   ),
  mesh
- );
-
-surfaceScalarField phiAir
-(
- IOobject
- (
-  "phiAir",
-  runTime.timeName(),
-  mesh,
-  IOobject::READ_IF_PRESENT,
-  IOobject::AUTO_WRITE
-  ),
- linearInterpolate(rhoAir*Uair) & mesh.Sf()
  );
 
 volScalarField rUAair
@@ -123,6 +100,54 @@ volScalarField T
  mesh
  );
 
+volScalarField rho
+(
+ IOobject
+ (
+  "rho",
+  runTime.timeName(),
+  mesh,
+  IOobject::READ_IF_PRESENT,
+  IOobject::AUTO_WRITE
+  ),
+mesh
+//zeroGradientFvPatchScalarField::typeName
+// pAir/linearInterpolate(R *T) 
+ );
+
+
+volScalarField cp
+(
+ IOobject
+ (
+  "cp",
+  runTime.timeName(),
+  mesh,
+  IOobject::READ_IF_PRESENT,
+  IOobject::AUTO_WRITE
+  ),
+mesh
+ );
+
+
+
+
+
+//volScalarField rho("rho", pAir / (R * T));
+
+surfaceScalarField phiAir
+(
+ IOobject
+ (
+  "phiAir",
+  runTime.timeName(),
+  mesh,
+  IOobject::READ_IF_PRESENT,
+  IOobject::AUTO_WRITE
+  ),
+ linearInterpolate(rho*Uair) & mesh.Sf()
+ );
+
 volScalarField k
 (
  IOobject
@@ -133,8 +158,88 @@ volScalarField k
   IOobject::MUST_READ,
   IOobject::AUTO_WRITE
   ),
+mesh
+ );
+
+Info<< "Reading cell field N\n" << endl;
+volScalarField N
+(
+ IOobject
+ (
+  "N",
+  runTime.timeName(),
+  mesh,
+  IOobject::MUST_READ,
+  IOobject::AUTO_WRITE
+  ),
+ mesh
+
+ );
+
+volScalarField Nair
+(
+ IOobject
+ (
+  "Nair",
+  runTime.timeName(),
+  mesh,
+  IOobject::NO_READ,
+  IOobject::AUTO_WRITE
+  ),
+ mesh,
+dimensionedScalar("Nair", dimLength, 0.0),
+zeroGradientFvPatchScalarField::typeName 
+ );
+
+
+
+volScalarField D
+(
+ IOobject
+ (
+  "D",
+  runTime.timeName(),
+  mesh,
+  IOobject::MUST_READ,
+  IOobject::AUTO_WRITE
+  ),
  mesh
  );
+
+
+
+volScalarField lambda
+(
+IOobject
+(
+"lambda",
+runTime.timeName(),
+mesh,
+IOobject::NO_READ,
+IOobject::AUTO_WRITE
+),
+mesh,
+//lambda,
+dimensionedScalar("lambda", dimLength, 0.0),
+zeroGradientFvPatchScalarField::typeName
+);
+
+
+volScalarField kn
+(
+IOobject
+(
+"kn",
+ runTime.timeName(),
+ mesh,
+IOobject::NO_READ,
+IOobject::AUTO_WRITE
+),
+mesh,
+dimensionedScalar("kn", dimLength, 0),
+zeroGradientFvPatchScalarField::typeName
+);
+
 
 /*
 Info<< "Reading field p\n" << endl;
@@ -186,3 +291,4 @@ scalar pRefValue = 0.0;
 setRefCell(p, mesh.solutionDict().subDict("PISO"), pRefCell, pRefValue);
 mesh.setFluxRequired(p.name());
 */
+

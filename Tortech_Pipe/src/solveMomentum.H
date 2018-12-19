@@ -2,7 +2,7 @@
     Info << nl << "Solving air flow" << endl;
 
     pAir.storePrevIter();
-
+//    rho1.storePrevIter();
     // Read controls
     const dictionary& piso = mesh.solutionDict().subDict("PISO");
     int nCorr(readInt(piso.lookup("nCorrectors")));
@@ -32,13 +32,14 @@
         Uair = UEqn.H()/UEqn.A();
         Uair.correctBoundaryConditions();
 
-        phiAir = fvc::interpolate(rhoAir*Uair) & mesh.Sf();
+        phiAir = fvc::interpolate(rho*Uair) & mesh.Sf();
+ //       rho= pAir/fvc:: interpolate(R*T);
 
-        for (int nonOrth = 0; nonOrth <= nNonOrthCorr; nonOrth++)
+       for (int nonOrth = 0; nonOrth <= nNonOrthCorr; nonOrth++)
         {
             fvScalarMatrix pEqn
             (
-                fvm::laplacian(rhoAir/UEqn.A(), pAir) == fvc::div(phiAir)// - mO2source
+                fvm::laplacian(rho/UEqn.A(), pAir) == fvc::div(phiAir)// - mO2source
             );
 
             pEqn.setReference(pAirRefCell, pAirRefValue);
@@ -48,7 +49,8 @@
             {
                 phiAir -= pEqn.flux();
             }
-        }
+
+         }
 
 //        continuityErrs(phiAir);
 

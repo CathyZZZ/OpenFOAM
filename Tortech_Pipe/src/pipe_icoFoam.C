@@ -31,7 +31,8 @@ Description
 
 #include "fvCFD.H"
 #include "pisoControl.H"
-
+#define _USE_MATH_DEFINES
+#include <math.h>       
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -55,11 +56,12 @@ int main(int argc, char *argv[])
 //        #include "CourantNo.H"
 
         // Momentum predictor
- //       #include "createFields.H"
-        #include "solveEnergy.H"
-        #include "solveMomentum.H"
-
-    
+//        #include "createFields.H"
+          #include "solveMomentum.H"
+          #include "solveEnergy.H"
+//          #include "solveMomentum.H"
+         #include "solvefn_ofT.H"
+         #include "solveFlux.H"
         runTime.write();
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
