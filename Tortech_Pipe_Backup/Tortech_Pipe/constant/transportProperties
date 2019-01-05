@@ -1,0 +1,30 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dAir              dAir  [0 1 0 0 0 0 0]  2.89e-10;
+BoltzConst       BoltzConst [1 -2 2 0 0 0 0] 1.38e-23;
+dp                dp    [0 1 0 0 0 0 0]     1e-8;
+Na                Na    [0 -3 0 0 0 0 0]    6.02e23;
+R                 R     [ 0 2 -2 -1 0 0 0]  8314;
+//rho             rho   [1 -3 0 0 0 0 0]     0.0305;
+//mu              mu    [ 1 -1 -1 0 0 0 0 ]  2.41e-5;
+//Cp              Cp    [0 2 -2 -1 0 0 0]    1.22e4;
+//DT              DT    [ 0 2 -1 0 0 0 0 ] 0.001;
+//DT at 800K
+//nu equals kinematic viscosity/density=(0.88*10^-5)/0.0893.
+// ************************************************************************* //

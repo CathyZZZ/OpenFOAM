@@ -14,16 +14,31 @@ FoamFile
     object      transportProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//*******************************Constant**********************************//
+dAir              dAir  [0 1 0 0 0 0 0]  2.89e-10;
+BoltzConst       BoltzConst [1 -2 2 0 0 0 0] 1.38e-23;
+dp                dp    [0 1 0 0 0 0 0]     1e-8;
+Na                Na    [0 -3 0 0 0 0 0]    6.02e23;
+R                 R     [ 0 2 -2 -1 0 0 0]  8314;
 
 
+//******************************Parameter*************************************//
+dpDisp      dpDisp [0 1 0 0 0 0 0]     90e-9; //inlet particle size of dispersed phase
+NpDisp      NpDisp [0 -3 0 0 0 0 0]     0; //1e10; //inlet particle size of dispersed phase
+nodes       nodes [0 0 0 0 0 0 0]       21; ////number of nodes
+
+MWDisp      MWDisp [1 0 0 0 -1 0 0]     0.026981539; //molecular weight (t.b.d. loop up values of HC)
+rhoDisp     rhoDisp [1 -3 0 0 0 0 0]     2700;
+ACoeff      ACoeff [1 0 -2 0 0 0 0]          948; //surface tension coefficient
+BCoeff      BCoeff [1 0 -2 -1 0 0 0]         0.202; //surface tension coefficient
+CCoeff      CCoeff [0 0 0 0 0 0 0]       13.07; //saturation vapor pressure coeff.
+DCoeff      DCoeff [0 0 0 1 0 0 0]       36373; //saturation vapor pressure coeff.
+dimCorr     dimCorr [0 3 -1 0 0 0 0]    1; //dimension correction factor gamma
 
 
-
-rho             rho   [1 -3 0 0 0 0 0]     0.0305;
-mu              mu    [ 1 -1 -1 0 0 0 0 ]  2.41e-5;
-// 2.41e-5;
-Cp              Cp    [0 2 -2 -1 0 0 0]    1.22e4;
-DT              DT    [ 0 2 -1 0 0 0 0 ] 0.001;
-//DT at 800K
-//nu equals kinematic viscosity/density=(0.88*10^-5)/0.0893.
+//********************************Setting*************************************//
+nucleation              true;  // activate nucleation
+growth             false;//     true;  // activate evaporation/condensation
+coagulation        false;//     true;  // activate coagulation
+monomerBal              false;  // activate monomer balance
 // ************************************************************************* //

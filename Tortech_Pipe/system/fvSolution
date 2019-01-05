@@ -33,6 +33,15 @@ solvers
           relTol          0; 
     }   
 */
+    nPart
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-09;
+        relTol          0.0;
+        minIter         1;
+        maxIter         700;
+    }
 
   
   Uair
@@ -55,8 +64,20 @@ solvers
         maxIter         700;
 
     }
-}
 
+
+  N
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-09;
+        relTol          0;
+        minIter         1;
+        maxIter         700;
+
+    }
+
+}
 PISO
 {
     nIteration      1; //0;
@@ -70,5 +91,6 @@ relaxationFactors
 {
     pAir            0.3;
     Uair            0.7;
+    nPart           0.3;
 }
 // ************************************************************************* //

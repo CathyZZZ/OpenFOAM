@@ -744,7 +744,9 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/listOutput.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/createTime.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/createMesh.H \
 createFields.H \
-solveEnergy.H \
 solveMomentum.H \
+solveEnergy.H \
+solvefn_ofT.H \
+solveAirScalars.H \
 
 
