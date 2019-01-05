@@ -1,4 +1,4 @@
-    Info<< "Reading	 transportProperties\n" << endl;
+    Info<< "Reading transportProperties\n" << endl;
 
     volTensorField directions
     (
@@ -38,7 +38,7 @@
     dimensionedScalar nodes(transportProperties.lookup("nodes"));
     dimensionedScalar d1(transportProperties.lookup("dpMax"));
     dimensionedScalar dimCorr(transportProperties.lookup("dimCorr"));
-    Switch nucleation(transportProperties.lookup("nucleation"));//switch between true and false.
+    Switch nucleation(transportProperties.lookup("nucleation"));
     Switch growth(transportProperties.lookup("growth"));
     Switch coagulation(transportProperties.lookup("coagulation"));
     Switch monomerBal(transportProperties.lookup("monomerBal"));
@@ -93,11 +93,11 @@
         Xijk.set (
             k, 
             new PtrList<PtrList<dimensionedScalar> >(node2)
-       		 );
-			forAll(Xijk[k], j) {
-		  	  Xijk[k].set (
-		       			 j, 
-            				new PtrList<dimensionedScalar>(node3)
+        );
+		forAll(Xijk[k], j) {
+		    Xijk[k].set (
+		        j, 
+            	new PtrList<dimensionedScalar>(node3)
 		    );
 			forAll(Xijk[k][j], i) {
 				Xijk[k][j].set (
@@ -180,7 +180,7 @@
                 mesh
             )
         );
-        airNs.add(Nair[i]);//airNs calculate total number of particles, Nair[i] calculate number of particles at node i.
+        airNs.add(Nair[i]);
     }
 
     multivariateSurfaceInterpolationScheme<scalar>::fieldTable NSatks;
@@ -190,7 +190,7 @@
     {
 	char rNSatk[16];
 	label indx = i+1;
-    sprintf (rNSatk, "NSatk%d", indx);
+	sprintf (rNSatk, "NSatk%d", indx);
         NSatk.set
         (
             i,

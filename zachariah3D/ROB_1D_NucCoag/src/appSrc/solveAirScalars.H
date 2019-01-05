@@ -17,8 +17,7 @@ Info << "diameter for node " << i << " " << Nair[i][0] << " = " << dp[i].value()
 	<< nl<< "S " << S[2000] 
 	<< nl<< "S " << S[9999] << endl;
 
-    Info << nl << "N1[400]=" << N1[400] << nl << "N1[800]"<< nl <<"N1[1500]"<< N1[1500] << endl;
-
+//	sigma = (ACoeff-BCoeff*T)/1000;
 //	pSat = pAir*Foam::exp(CCoeff-DCoeff/T);
 //	S = N1*kb*T/pSat;
 //	theta = s1*sigma/(T*kb);
@@ -55,12 +54,6 @@ forAll(N1, cellI) {
 	vpstar[cellI] = pi/6*Foam::pow(dpstar[cellI],3);
 
 }
-/*
-    Info << nl << CCoeff.value()<< nl << DCoeff.value() << endl;
-    Info << nl << "T[400]=" << T[400] << nl << "T[800]"<< T[800]<< nl <<"T[1500]="<<T[1500] << endl;
-    Info << nl << "pAir[400]=" << pAir[400] << nl << "pAir[800]"<< nl <<"pAir1500]"<< pAir[1500] << endl;
-    Info << nl << "pSat[400]=" << pSat[400] << nl << "pSat[800]"<< nl <<"pSat[1500]"<< pSat[1500] << endl;
-*/
 //	Info<< nl << "N1 " << N1[0]
 //	<< nl<< "N1 " << N1[472] 
 //	<< nl<< "S " << S[0] 
@@ -91,29 +84,13 @@ forAll(N1, cellI) {
     {
        term7[cellI] = Foam::pow((3/(pi*4)),0.16666666666)*Foam::pow((6*kb.value()*T[cellI]/rhoDisp.value()),0.5);
     }
-   // Info<<"term7[5000]="<< term7[5000]<<endl; 
+
 //saturation concentration over particles of size i
     for (label k = 0; k < node; k++)
     {
 		NSatk[k] = pSat/(kb*T)*Foam::exp(4*sigma*MWDisp/(R*T*rhoDisp*dp[k]));
-//        Info << "NSatk["<<k<<"][5000]"<<NSatk[k][5000] << endl;
-//        Info << "R="<< R<< endl;
- //       Info<<"T"<<T[5000]<<"sigma"<<sigma[5000]<<"pSat"<< pSat[5000]<<endl;
-     //   Info << kb << R << dp[k] << rhoDisp << MWDisp << endl;
 	}
-/*
-Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma="<< sigma[5000] <<"MWDisp="<< MWDisp.value() <<nl<<"R="<< R.value() <<nl<<"rhoDisp="<< rhoDisp.value() <<nl<<"dp[0]"<< dp[0].value() << endl;
-Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma="<< sigma[5000] <<"MWDisp="<< MWDisp.value() <<nl<<"R="<< R.value() <<nl<<"rhoDisp="<< rhoDisp.value() <<nl<<"dp[k]"<< dp[20].value() << endl
-;*/
-//Info << "printout"<< NSatk << endl;
-//       Info << "NSatk["<<0<<"][5000]"<<NSatk[5000] << endl;
-    // double aa= pSat[5000] / (kb * T[5000]) ;
-    // double bb = 4 * sigma[5000] * MWDisp.value() / (R.value() * T[5000] * rhoDisp.value() * dp[0].value());
-    // double cc = Foam::exp(bb);
-    // double dd = aa * cc;
-//     Info << nl << "NSatk["<<0<<"][5000]="<<NSatk[0][5000]<< endl;
-//     Info << pSat[5000] / (kb * T[5000]) << nl << 4 * sigma[5000] * MWDisp.value() / (R.value() * T[5000] * rhoDisp.value() * dp[0].value()) << nl <<endl;
-//Info << pSat[5000] << kb << T[5000] << sigma[5000] << MWDisp << R << rhoDisp << dp[k] << endl;
+
 //collision frequency kernels used for coagulation and growth
     for (label k = 0; k < node; k++)
     {
@@ -121,12 +98,7 @@ Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma=
     	{
 			scalar gammaExpTerm = Foam::pow(vp[k].value(),0.3333333)+Foam::pow(vp[j].value(),0.3333333);
 			
-                            Ngamma[k][j] = dimCorr*term7*Foam::pow(1/vp[j].value()+1/vp[k].value(),0.5)*Foam::pow(gammaExpTerm,2);
-                        // double tem2= Foam::pow(1/vp[j].value()+1/vp[k].value(),0.5);
-                        //   Info <<" temporary_term["<<k<<"]["<<j<< "]="<< gammaExpTerm << endl;
-                        // Info << "dimCorr="<<dimCorr<<endl;
-                      //   Info <<" temporary_term2[" << k << "][" <<j << "]="<< tem2 << endl;
-                      //   Info << "Ngamma["<<k<<"]["<<j<<"]="<< Ngamma[k][j][5000] << endl;
+			Ngamma[k][j] = dimCorr*term7*Foam::pow(1/vp[j].value()+1/vp[k].value(),0.5)*Foam::pow(gammaExpTerm,2);
 		}
 	}
 
@@ -187,8 +159,6 @@ Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma=
 			
 			}
 			}
-       Info << nl << "srcNucleation[400]="<< srcNucleation[400] << nl << "srcNucleation[800]=" << srcNucleation[800] << nl << "srcNucleation[1500]"<< srcNucleation[1500] << endl;
-
 		}
 		
 		//growth source terms
@@ -220,7 +190,7 @@ Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma=
 					//evaporation of monomers from node k --> decrease of Nk, increase of N1 				(increase of N_(k-1))
 					if (N1[cellI]<NSatk[k][cellI]) 
 					{
-						subterm[cellI] = -(v1.value()/(vp[k].value()-vp[k-1].value()))*Ngamma[0][k][cellI]*(N1[cellI]-NSatk[k][cellI]);//missing term!
+						subterm[cellI] = -(v1.value()/(vp[k].value()-vp[k-1].value()))*Ngamma[0][k][cellI]*(N1[cellI]-NSatk[k][cellI]);
 						t3Plus[cellI] = t3Plus[cellI] + Ngamma[0][k][cellI]*Nair[k][cellI];
 						t3Minus[cellI] = t3Minus[cellI] - Ngamma[0][k][cellI]*NSatk[k][cellI]*Nair[k][cellI];
 					}
@@ -263,7 +233,6 @@ Info << "pSat=" <<pSat[5000] <<nl<<"kb="<< kb <<nl<<"T="<< T[5000] <<nl<<"sigma=
 				srcCoagulation[cellI] = coagterm1[cellI];
 			}
 
-       Info << nl << "srcCoagulation[400]="<< srcCoagulation[400] << nl << "srcCoagulation[800]=" << srcCoagulation[800] << nl << "srcCoagulation[1500]"<< srcCoagulation[1500] << endl;
 		}
 
 	    if (k > 0)
