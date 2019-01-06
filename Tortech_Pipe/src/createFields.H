@@ -403,6 +403,7 @@ volScalarField muAir
 
 
 
+
 Info<< "Creating field Velocity" <<endl;
 volVectorField Uair
 (
@@ -445,7 +446,7 @@ volScalarField T
   IOobject::MUST_READ,
   IOobject::AUTO_WRITE
   ),
- mesh
+mesh
  );
 
 volScalarField rho
@@ -494,19 +495,19 @@ surfaceScalarField phiAir
   IOobject::AUTO_WRITE
   ),
  linearInterpolate(rho*Uair) & mesh.Sf()
- );
 
+ );
 volScalarField k
 (
- IOobject
- (
-  "k",
-  runTime.timeName(),
-  mesh,
-  IOobject::MUST_READ,
-  IOobject::AUTO_WRITE
- ),
-mesh
+  IOobject
+  (
+   "k",
+   runTime.timeName(),
+   mesh,
+   IOobject::MUST_READ,
+   IOobject::AUTO_WRITE
+  ),
+  mesh
 );
 
 Info<< "Reading cell field N\n" << endl;

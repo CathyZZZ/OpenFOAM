@@ -1,4 +1,4 @@
-    Info<< "Reading transportProperties\n" << endl;
+    Info<< "Reading	 transportProperties\n" << endl;
 
     volTensorField directions
     (
@@ -38,7 +38,7 @@
     dimensionedScalar nodes(transportProperties.lookup("nodes"));
     dimensionedScalar d1(transportProperties.lookup("dpMax"));
     dimensionedScalar dimCorr(transportProperties.lookup("dimCorr"));
-    Switch nucleation(transportProperties.lookup("nucleation"));
+    Switch nucleation(transportProperties.lookup("nucleation"));//switch between true and false.
     Switch growth(transportProperties.lookup("growth"));
     Switch coagulation(transportProperties.lookup("coagulation"));
     Switch monomerBal(transportProperties.lookup("monomerBal"));
@@ -93,11 +93,11 @@
         Xijk.set (
             k, 
             new PtrList<PtrList<dimensionedScalar> >(node2)
-        );
-		forAll(Xijk[k], j) {
-		    Xijk[k].set (
-		        j, 
-            	new PtrList<dimensionedScalar>(node3)
+       		 );
+			forAll(Xijk[k], j) {
+		  	  Xijk[k].set (
+		       			 j, 
+            				new PtrList<dimensionedScalar>(node3)
 		    );
 			forAll(Xijk[k][j], i) {
 				Xijk[k][j].set (
@@ -113,32 +113,41 @@
 						Info << "nodes2 " << node2 << endl;
 						Info << "nodes3 " << node3 << endl;
 
-	for (label k = 0; k < node-1; k++) {
-		for (label i = 0; i < node-1; i++) {
-			for (label j = 0; j < node-1; j++) {
-				if((vp[k].value() <= (vp[i].value()+vp[j].value())) && ((vp[i].value()+vp[j].value())<vp[k+1].value())){
-				  Xijk[i][j][k].value()=(vp[k+1].value()-vp[i].value()-vp[j].value())/(vp[k+1].value()-vp[k].value());
-				}
-				else
+	for (label k = 1; k < node; k++) {
+		for (label i = 0; i < node; i++) {
+			for (label j = 0; j < node; j++) {
+				if (k == node-1)
 				{
-					if (k > 0)
+					if((vp[k].value() <= (vp[i].value()+vp[j].value())))
 					{
-						if((vp[k-1].value()<= (vp[i].value()+vp[j].value())) && ((vp[i].value()+vp[j].value())<vp[k].value()) && k > 0)
-						{
-							Xijk[i][j][k].value()=(vp[i].value()+vp[j].value()-vp[k-1].value())/(vp[k].value()-vp[k-1].value());		      
-						}
-						else
-						{
-						Xijk[i][j][k].value()=0;
-						}
+						Xijk[i][j][k].value()=1;
+					}
+					else if ((vp[k-1].value()<= (vp[i].value()+vp[j].value())) && ((vp[i].value()+vp[j].value())<vp[k].value()))
+					{
+						Xijk[i][j][k].value()=(vp[i].value()+vp[j].value()-vp[k-1].value())/(vp[k].value()-vp[k-1].value());
 					}
 					else
 					{
 					Xijk[i][j][k].value()=0;
 					}
 				}
-       			 Info << i << " " << j << " " << k << " " << Xijk[i][j][k].value() <<endl;
-
+				else
+				{
+					if((vp[k].value() <= (vp[i].value()+vp[j].value())) && ((vp[i].value()+vp[j].value())<vp[k+1].value()))
+					{
+						Xijk[i][j][k].value()=(vp[k+1].value()-vp[i].value()-vp[j].value())/(vp[k+1].value()-vp[k].value());
+					}
+					else if ((vp[k-1].value()<= (vp[i].value()+vp[j].value())) && ((vp[i].value()+vp[j].value())<vp[k].value()))
+					{
+						Xijk[i][j][k].value()=(vp[i].value()+vp[j].value()-vp[k-1].value())/(vp[k].value()-vp[k-1].value());
+					}
+					else
+					{
+					Xijk[i][j][k].value()=0;
+					}
+				}
+				if (j == 20 && i == 20)
+		       		Info << i << " " << j << " " << k << " " << Xijk[i][j][k].value() <<endl;
 			}
 		}
 	}
@@ -171,7 +180,7 @@
                 mesh
             )
         );
-        airNs.add(Nair[i]);
+        airNs.add(Nair[i]);//airNs calculate total number of particles, Nair[i] calculate number of particles at node i.
     }
 
     multivariateSurfaceInterpolationScheme<scalar>::fieldTable NSatks;
@@ -181,7 +190,7 @@
     {
 	char rNSatk[16];
 	label indx = i+1;
-	sprintf (rNSatk, "NSatk%d", indx);
+    sprintf (rNSatk, "NSatk%d", indx);
         NSatk.set
         (
             i,

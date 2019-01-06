@@ -1,0 +1,147 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001;
+
+vertices
+
+(
+    (0 0 0)
+    (0 42.46 -1.854)
+    (0 42.46 1.854)
+    (2000 0 0)
+    (2000 42.46 -1.854)
+    (2000 42.46 1.854)
+    
+   );
+
+/*
+    (0 0 0)
+    (0 64.938 -2.835)
+    (0 64.938 2.835)
+    (1600 0 0)
+    (1600 64.938 -2.835)
+    (1600 64.938 2.835)
+ //Furnace length=1350mm, Diameter=130mm,2.5DEGREE EACH SIDE
+
+
+
+
+    (0 0 0)
+    (0 42.46 -1.854)
+    (0 42.46 1.854)
+    (1600 0 0)
+    (1600 42.46 -1.854)
+    (1600 42.46 1.854)
+ //Furnace length=1350mm, Diameter=85mm,2.5DEGREE EACH SIDE
+
+
+
+    (0 0 0)
+    (0 42.46 -1.854)
+    (0 42.46 1.854)
+    (2100 0 0)
+    (2100 42.46 -1.854)
+    (2100 42.46 1.854)
+ //Furnace length =1850 Diameter=85mm,2.5DEGREE EACH SIDE
+
+
+    (0 0 0)
+    (0 64.938 -2.835)
+    (0 64.938 2.835)
+    (2100 0 0)
+    (2100 64.938 -2.835)  
+    (2100 64.938 2.835)
+ //Furnace length=1850mm, Diameter=130mm,2.5DEGREE EACH SIDE
+
+*/
+
+
+blocks
+(
+    hex (0 1 2 0 3 4 5 3) (50 1 159) simpleGrading (1 1 1)
+);
+
+edges
+(
+  arc 1 2 (0 42.5 0)
+  arc 4 5 (2000 42.5 0)
+);
+
+boundary
+(
+    axis
+    {
+        type empty;
+        faces
+        (
+            (0 3 3 0)
+        );
+    }
+
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 0 2 1)
+      
+          );
+       
+    }
+    wall
+    {
+        type wall;
+        faces
+        (
+            (2 5 4 1)
+       
+        );
+    }
+    outlet
+      {
+          type patch;
+          faces
+          (
+              (3 4 5 3)
+       
+          );
+}
+    front     
+      {
+          type wedge;
+          faces
+          (
+              (0 3 5 2)
+       
+          );
+      }
+
+    back
+      {
+          type wedge;
+          faces
+          (
+              (0 1 4 3)
+       
+          );
+      }
+);
+
+mergePatchPairs
+(
+);
+//********************************************************************************//

@@ -8,7 +8,7 @@ Info << nl << "Solving density" << endl;
 	}
 
 
-Info << "Rho min mean max     = "
+ Info << "Rho min mean max     = "
          << Foam::gMin(rho.internalField()) << "    "
          << Foam::gAverage(rho.internalField()) << "    "
          << Foam::gMax(rho.internalField())
