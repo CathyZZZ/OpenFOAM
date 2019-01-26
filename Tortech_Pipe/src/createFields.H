@@ -99,15 +99,23 @@ for (label k = 1; k < node; k++) {
                      (vp[k+1].value() >(vp[i].value() + vp[j].value() ))) {
                     Xijk[k][j][i].value() =
                         (vp[k+1].value()-vp[i].value()-vp[j].value()) / (vp[k+1].value()-vp[k].value());
+
+
+                   Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
+                   Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
                 }
                 else if ( ( vp[k-1].value() < (vp[i].value() + vp[j].value()) ) &&
                           ( vp[k].value() > (vp[i].value() + vp[j].value()) )) {
-                    Xijk[k][j][i].value() = (vp[i].value() + vp[j].value() - vp[k-1].value()) / (vp[k].value() - vp[k-1].value());
+                   Xijk[k][j][i].value() = (vp[i].value() + vp[j].value() - vp[k-1].value()) / (vp[k].value() - vp[k-1].value());
+               
+                
+                   Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
+                   Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
                 }
                 else {
                     Xijk[k][j][i].value() = 0;
                 }
-            }
+                }
             else if (k == node-1) {
                 if (vp[k].value() < (vp[i].value() + vp[j].value())) {
                     Xijk[k][j][i].value() = 1;
@@ -119,7 +127,8 @@ for (label k = 1; k < node; k++) {
                 else {
                     Xijk[k][j][i].value() =0;
                 }
-            }     
+            }
+            
         }
     }
 }
