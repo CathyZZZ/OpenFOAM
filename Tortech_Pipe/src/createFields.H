@@ -23,7 +23,7 @@ dimensionedScalar CCoeff(transportProperties.lookup("CCoeff"));
 dimensionedScalar DCoeff(transportProperties.lookup("DCoeff"));
 dimensionedScalar MWDisp(transportProperties.lookup("MWDisp"));
 dimensionedScalar rhoDisp(transportProperties.lookup("rhoDisp"));
-
+//dimensionedScalar nPartnode1(transportProperties.lookup("nPartnode1"));
 
 dimensionedScalar nodes(transportProperties.lookup("nodes"));
 
@@ -66,7 +66,7 @@ if (read.is_open()) {
 	for ( label i=0; i<node; i++) {
 		read >> dp[i].value();
 		vp[i] = pi/6* pow(dp[i],3);
-		Info << "diameter for node " << i+1 << "" << dp[i].dimensions() << endl;
+		Info << "diameter for node " << i+1 << "" << dp[i].dimensions() <<"="<< dp[i].value() << endl;
 	}
 }
 else {
@@ -88,9 +88,11 @@ forAll(Xijk, k) {
 	}
 }
 
-Info << "nodes1" << node1 << endl;
+/*Info << "nodes1" << node1 << endl;
 Info << "nodes2" << node2 << endl;
 Info << "nodes3" << node3 << endl;
+*/
+Info <<" node="<< node<< endl;
 for (label k = 1; k < node; k++) {
     for (label j = 0; j < node; j++) {
         for (label i = 0; i < node; i++) {
@@ -101,16 +103,16 @@ for (label k = 1; k < node; k++) {
                         (vp[k+1].value()-vp[i].value()-vp[j].value()) / (vp[k+1].value()-vp[k].value());
 
 
-                   Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
-                   Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
+ //                  Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
+ //                  Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
                 }
                 else if ( ( vp[k-1].value() < (vp[i].value() + vp[j].value()) ) &&
                           ( vp[k].value() > (vp[i].value() + vp[j].value()) )) {
                    Xijk[k][j][i].value() = (vp[i].value() + vp[j].value() - vp[k-1].value()) / (vp[k].value() - vp[k-1].value());
                
                 
-                   Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
-                   Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
+   //                Info << "vpi="<<vp[i].value()<<nl<<"vpj="<<vp[j]<<nl<<"vpk="<<vp[k]<<endl;
+     //              Info << "i="<<i<<nl<<"j="<<j<<nl<<"k="<<k<<nl<<"Xijk="<<Xijk[k][j][i].value()<<endl;
                 }
                 else {
                     Xijk[k][j][i].value() = 0;
@@ -133,7 +135,7 @@ for (label k = 1; k < node; k++) {
     }
 }
 
-
+/*
 Info<< "Reading field nPart\n" << endl;
 PtrList<volScalarField> Nair(nodes.value());
 for (label i=0; i<nodes.value(); i++) {
@@ -148,10 +150,51 @@ for (label i=0; i<nodes.value(); i++) {
                     rnPart,
                     runTime.timeName(),
                     mesh,
-                    IOobject::MUST_READ,
+                    IOobject::NO_READ,
                     IOobject::AUTO_WRITE
                 ),
                 mesh
+              )
+            );
+}
+*/
+
+Info<< "Reading field nPart\n" << endl;
+
+volScalarField nPartNode1
+(
+  IOobject
+   (
+    "nPartNode1",
+    runTime.timeName(),
+    mesh,
+    IOobject::MUST_READ,
+    IOobject::AUTO_WRITE
+   ),
+mesh
+);
+PtrList<volScalarField> Nair(nodes.value());
+for (label i=0; i<nodes.value(); i++) {
+    char rnPart[16];
+    sprintf (rnPart, "nPartNode%d", i+1);
+    if (i==0) {
+        Nair.set(0, &nPartNode1);
+        continue;
+    }
+    Nair.set( i, 
+              new volScalarField
+              (
+                IOobject
+                (
+                    rnPart,
+                    runTime.timeName(),
+                    mesh,
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                mesh,
+                dimensionedScalar(rnPart, dimensionSet(0,-3,0,0,0,0,0), 0.0),
+                zeroGradientFvPatchScalarField::typeName
               )
             );
 }
@@ -178,7 +221,7 @@ for (label i = 0; i < node; i++) {
                     zeroGradientFvPatchScalarField::typeName
                )
                     );
-        //gammaNs.add(Ngamma[j][i]);
+       //gammaNs.add(Ngamma[j][i]);
 
 }
 
@@ -257,7 +300,7 @@ volScalarField pSat//saturation vapor pressure
 (
      IOobject
     (
-     "pSat",
+    "pSat",
      runTime.timeName(),
      mesh,
      IOobject::NO_READ,
@@ -423,7 +466,7 @@ volVectorField Uair
   mesh,
   IOobject::MUST_READ,
   IOobject::AUTO_WRITE
-  ),
+ ),
  mesh
  );
 
@@ -483,7 +526,7 @@ volScalarField cp
   mesh,
   IOobject::READ_IF_PRESENT,
   IOobject::AUTO_WRITE
-  ),
+ ),
 mesh
  );
 
@@ -589,12 +632,11 @@ volScalarField lambda
  (
  "kn",
   runTime.timeName(),
-   mesh,
-   IOobject::NO_READ,
-   IOobject::AUTO_WRITE
-   ),
-   mesh,
-   dimensionedScalar("kn", dimLength, 0),
-   zeroGradientFvPatchScalarField::typeName
-   );
- 
+  mesh,
+  IOobject::NO_READ,
+  IOobject::AUTO_WRITE
+ ),
+ mesh,
+ dimensionedScalar("kn", dimLength, 0.0),
+ zeroGradientFvPatchScalarField::typeName
+ ); 

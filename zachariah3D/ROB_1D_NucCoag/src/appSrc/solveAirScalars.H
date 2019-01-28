@@ -8,6 +8,7 @@ Info << "diameter for node " << i << " " << Nair[i][0] << " = " << dp[i].value()
 
 // equations for dispersed phase represented by size nodes
 	volScalarField& N1 = Nair[0];
+ //   Info << "Nair[0]"<< Nair[0]<< endl;
 	Info << nl << "N1 " << N1[0]  
 	<< nl<< "N1 " << N1[472] 
 	<< nl<< "N1 " << N1[2000] 
@@ -116,7 +117,8 @@ forAll(N1, cellI) {
 		volScalarField addterm = 0.0*Jk;
 		volScalarField subterm = 0.0*Jk2;
 		volScalarField coagterm1 = 0.0*Jk;
-		volScalarField coagterm2 = 0.0*Jk/N1;
+       // Info<<"N1="<< N1 << endl;
+            volScalarField coagterm2 = 0.0*Jk/N1;
 		volScalarField coagterm3 = 0.0*Jk/N1;
 
 		//nucleation source terms
@@ -139,7 +141,7 @@ forAll(N1, cellI) {
 //					rc[k][cellI]=1; 
 //				}
 				srcNucleation[cellI] = Jk[cellI]*Nzeta[k][cellI];
-
+                
 //				srcMonoNuc[cellI] = JkN1[cellI]*kstar[cellI];
 //				srcMonoNuc[cellI] += JkN1[cellI]*Nzeta[k][cellI]*vp[k].value()/v1.value();
 				srcMonoNuc[cellI] = JkN1[cellI]*vpstar[cellI]/v1.value();
@@ -159,6 +161,7 @@ forAll(N1, cellI) {
 			
 			}
 			}
+            Info <<"srcNucleation[5000]"<< srcNucleation[5000]<< endl;
 		}
 		
 		//growth source terms
@@ -207,6 +210,8 @@ forAll(N1, cellI) {
 				srcMonoMinus[cellI] = t1Minus[cellI]+t2Minus[cellI]+t3Minus[cellI]+t4Minus[cellI];
 				}
 		}
+
+            Info <<"srcgrowth[5000]"<< addterm[5000]<< endl;
 		}
 
 
@@ -233,7 +238,17 @@ forAll(N1, cellI) {
 				srcCoagulation[cellI] = coagterm1[cellI];
 			}
 
+            Info <<"srccoagulationn[5000]"<< srcCoagulation[5000]<< endl;
 		}
+/*Info<<"Dimension4"<< phiAir.dimensions()<< endl;
+Info<<"Dimension5"<< Nk.dimensions() << endl;
+Info<<"Dimension1"<< srcNucleation.dimensions() << endl;
+
+
+Info<<"Dimension2"<< srcCoagulation.dimensions()<< endl;
+Info<<"Dimension3"<< addterm.dimensions()<< endl;
+*/
+
 
 	    if (k > 0)
 	    {
@@ -283,6 +298,7 @@ forAll(N1, cellI) {
 //		);
 
 
+ //       Info<<"N1="<< N1 << endl;
 		forAll(N1, cellI)
     	{
         	if (srcMonoNuc[cellI]==0.01)

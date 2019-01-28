@@ -1,16 +1,20 @@
 {
 
         Info << nl << "Solving air scalars" << endl;
+//Info<<nl<<"XXXXX"<< Nair[0][1] << Nair[0][5000]<<endl;
 forAll(dp, i) {
         Info << "diameter for node " << i << " " << Nair[i][0] << " = " << dp[i].value() << " " <<endl;
 }
-
+/*forAll(Nair[0], cellI) {
+    Info << Nair[0][cellI]<< nl<<endl;
+}
+*/
  //       rhoTFlux = mesh.magSf()*fvc::snGrad(T);//-3*mu*rhoAir*rhoTFlux/4/T
-
 volScalarField& N1 = Nair[0];
 Info << nl << "N1[400]="<< N1[400] << nl << "N1[800]=" << N1[800] << nl << "N1[5000]"<< N1[5000] << endl; 
 
 Info << nl << "T[400]="<< T[400] << nl << "T[800]=" << T[800] << nl << "T[5000]"<< T[5000] << endl; 
+Info << nl << "S" << S[400] << nl << "S" << S[800] << nl << "S" << S[5000] << endl;
 
 volScalarField term1 = S*0.0;
 volScalarField term2 = S*0.0; //Foam::pow((2*sigma)/(pi*m1),0.5);
@@ -21,7 +25,6 @@ volScalarField term6 = S*0.0; //2*theta/(3*term3);
 volScalarField term7 = S*0.0;
 volScalarField SN1 = S*0.0; //kb*T/pSat;
 volScalarField JkN1 = S*0.0; //SN1*v1*term1*term2*term5;
-
 forAll(N1,cellI) {
     sigma[cellI] = (ACoeff.value()-BCoeff.value()*T[cellI])/1000;
     pSat[cellI] = pAir[cellI]*Foam::exp(CCoeff.value()-DCoeff.value()/T[cellI]);
@@ -61,10 +64,9 @@ Info << nl << "vpstar[400]="<< vpstar[400] << nl << "vpstar[800]=" << vpstar[800
 */
 //collision frequency beta calculation
 forAll(term7,cellI) {
-    term7[cellI] = Foam::pow((3/( pi * 4)),1 / 6) * Foam::pow(( 6* kb * T[cellI] /rhoDisp.value()), 0.5);
+    term7[cellI] = Foam::pow((3/( pi * 4)),1/6) * Foam::pow(( 6* kb * T[cellI] /rhoDisp.value()), 0.5);
 }
-Info << nl << "term7[400]="<< term7[400] << nl << "term7[800]=" << term7[800] << nl << "term7[1500]"<< term7[1500] << endl;
-//    Info << "PPPPPPPPP"<< endl;
+//Info << nl << "term7[400]="<< term7[400] << nl << "term7[800]=" << term7[800] << nl << "term7[1500]"<< term7[1500] << endl;
 //    Info << "MW"<< MWDisp << endl;
 //saturation concentration over particles of size i
     //Info << T<< endal;
@@ -74,6 +76,7 @@ for (int k =0; k<node; k++) {
          NSatk[k][cellI] =  pSat[cellI]/ (kb *T[cellI]) *Foam::exp(4000 * sigma[cellI] * MWDisp.value()/(R.value() * T[cellI] * rhoDisp.value() * dp[k].value()));        
 }
 
+//    Info << "MW"<< MWDisp << endl;
   //       Info <<" k=" <<k << endl;
 
 //Info <<"NSatl["<<k<<"]="<< NSatk[k][5000] << endl;
@@ -93,7 +96,7 @@ Info <<"NSatk_total"<< pSat[5000] / (kb * T[5000]) * Foam::exp(4 * sigma[5000] *
 }
 
 
-scalar beta = 0;
+//scalar beta = 0;
  //   Info << "XXXXXXXx"<< endl;
 //collision frequency kernels used for coagulation and growth
 for (label j = 0; j < node; j++) {
@@ -101,7 +104,7 @@ for (label j = 0; j < node; j++) {
     for (label i = 0; i < node; i++) {
         forAll(Beta[j][i], cellI) {
 
-             beta = Foam::pow(vp[j].value(), 1.0/3)+Foam::pow(vp[i].value(),1.0/3);
+             scalar beta = Foam::pow(vp[j].value(), 1/3)+Foam::pow(vp[i].value(),1/3);
 //            Info<<"qqqq"<< endl;
             Beta[j][i][cellI] = dimCorr.value() *term7[cellI] *Foam::pow(1/vp[i].value()+1/vp[j].value(),0.5)*Foam::pow(beta,2);
         }
@@ -119,7 +122,9 @@ for (label j = 0; j < node; j++) {
 //Info<<"1111111111"<< endl;
 
 //Info << N1<< endl;
-volScalarField srcMonoNuc = 0.0 * Jk ;
+volScalarField srcMonoNuc = 0.0 * Jk/N1 ;
+volScalarField srcMonoPlus = 0.0*Jk/N1;
+//volScalarField srcMonoMinus = 0.0 *Jk;
 //Info << Jk<< endl;
 //Info << N1<< endl;
 //Info<<srcMonoNuc<< endl;
@@ -128,7 +133,10 @@ volScalarField srcNucleation = 0.0 * Jk;
 
 volScalarField tem_growth = Nair[1];
 //    Info<<"22222222"<< endl;
-
+volScalarField t1Plus = 0.0 * Jk;
+volScalarField t2Plus = 0.0 * Jk;
+volScalarField t3Plus = 0.0 * Jk;
+volScalarField t4Plus = 0.0 * Jk;
 
 
 //SOURCE TERM CALCULATION
@@ -139,9 +147,9 @@ for (label k = 1; k<node; k++) {
     volScalarField addterm = 0.0 *Jk;
     volScalarField subterm = 0.0 *Jk2;
     volScalarField coagterm1 = 0.0 *Jk;//addterm
-    volScalarField coagterm2 = 0.0 *Jk;//sub term
+   // Info<<"N1"<< N1<< nl<<endl;
+    volScalarField coagterm2 = 0.0 *Jk/N1;//sub term
     volScalarField coagterm3 = 0.0 *Jk;
-//    Info<<"22222222"<< endl;
 //nucleation source terms
 
     if (nucleation) {
@@ -152,37 +160,37 @@ for (label k = 1; k<node; k++) {
             else if (( vp[k-1].value() <= vpstar[cellI] && (vpstar[cellI] <= vp[k].value()))) {
             Nzeta[k][cellI] = vpstar[cellI] / vp[k].value();
             }
-            else {
+            else 
                 Nzeta[k][cellI] = 0;
-            }
+            
             srcNucleation[cellI] = Jk[cellI] * Nzeta[k][cellI];
             srcMonoNuc[cellI] = -Jk[cellI] * kstar[k];//different from Robert's
        }
 
- //       Info << nl << "srcNucleation[400]="<< srcNucleation[400] << nl << "srcNucleation[800]=" << srcNucleation[800] << nl << "srcNucleation[1500]"<< srcNucleation[1500] << endl;
+        Info << nl << "srcNucleation[400]="<< srcNucleation[400] << "srcNucleation[800]=" << srcNucleation[800]  << "srcNucleation[1500]"<< srcNucleation[1500] << endl;
     }
 
     if (coagulation) {
         forAll (Nk, cellI) {
             for ( label i=1; i < node; i++) {
-                coagterm2[cellI] += Beta[i][k][cellI] * Nair[i][cellI];
+                coagterm2[cellI] += Beta[k][i][cellI] * Nair[i][cellI];
                 for ( label j=1; j < node; j++) {
                 coagterm1[cellI] += Xijk[i][j][k].value() * Beta[i][j][cellI] * Nair[i][cellI] * Nair[j][cellI];
                 }
             }
         }
         forAll(srcCoagulation, cellI) {
-            srcCoagulation[cellI] = 0.5 * coagterm1[cellI] - Nair[k][cellI] * coagterm2[cellI];
+            srcCoagulation[cellI] = 0.5 * coagterm1[cellI];
         }
-   //     Info << nl << "srcCoagulation[400]="<< srcCoagulation[400] << nl << "srcCoagulation[800]=" << srcCoagulation[800] << nl << "srcCoagulation[1500]"<< srcCoagulation[1500] << endl;
+        Info << nl << "srcCoagulation[400]="<< srcCoagulation[400] << "srcCoagulation[800]=" << srcCoagulation[800] << "srcCoagulation[1500]"<< srcCoagulation[1500] << endl;
     }
 
 
     if (growth) {
-        if (k < Nair.size()) {
+        if (k < Nair.size()-1) {
             //double oem_growth[cellI] = Nair[1][cellI];
 
-            forAll ( Nk, cellI) {
+            forAll ( N1, cellI) {
                 if (N1[cellI] > NSatk[k-1][cellI]) {
                     if (k==1) {
                         addterm[cellI] = 0;
@@ -190,17 +198,22 @@ for (label k = 1; k<node; k++) {
                     else
                      
                         addterm[cellI] = v1.value() /(vp[k].value() - vp[k-1].value()) * Beta[0][k-1][cellI]* (N1[cellI] -NSatk[k-1][cellI]) * tem_growth[cellI];
+                        t1Plus[cellI] = t1Plus[cellI] -Beta[0][k-1][cellI] *(N1[cellI] - NSatk[k-1][cellI]) * Nair[k-1][cellI];
                         //addterm[cellI] = v1.value()/(vp[k].value() - vp[k-1].value()) * Beta[0][k-1][cellI] (N1[cellI] -NSatk[k-1][cellI]) * Nair[k-1][cellI];
                 }
                 if (N1[cellI]<NSatk[k+1][cellI]) {
                     addterm[cellI] = -(v1.value() /( vp[k+1].value() - vp[k].value())) * Beta[0][k+1][cellI] *(N1[cellI] - NSatk[k+1][cellI]) * Nair[k+1][cellI];
+                    t2Plus[cellI] = t2Plus[cellI] + Beta[0][k+1][cellI] *(N1[cellI] - NSatk[k+1][cellI]) * Nair[k+1][cellI];
                 }
                 if (N1[cellI] < NSatk[k][cellI]) {
                     subterm[cellI] = -(v1.value() / (vp[k].value() - vp[k-1].value())) * Beta[0][k][cellI] * (N1[cellI] - NSatk[k][cellI]) * Nair[k][cellI];
+                    t3Plus[cellI] =t3Plus[cellI] + Beta[0][k][cellI] *(N1[cellI] - NSatk[k][cellI]) * Nair[k][cellI];
                 }
 
                 if (N1[cellI] > NSatk[k][cellI]) {
                     subterm[cellI] = (v1.value() / (vp[k+1].value() - vp[k].value())) * Beta[0][k][cellI] * (N1[cellI] - NSatk[k][cellI]) * Nair[k][cellI];
+                    t4Plus[cellI] = t4Plus[cellI] - Beta[0][k][cellI] *(N1[cellI] - NSatk[k][cellI]) * Nair[k][cellI];
+                
                 }
                 if (k != 1) {
                     tem_growth[cellI] = Nair[k-1][cellI]; 
@@ -209,17 +222,53 @@ for (label k = 1; k<node; k++) {
             }
         }
     
-     //   Info << nl << "srcgrowth[400]="<< srcgrowth[400] << nl << "srcgrowth[800]=" << srcgrowth[800] << nl << "srcgrowth[1500]"<< srcgrowth[1500] << endl;
+        Info << nl << "srcgrowth[400]="<< srcgrowth[400] << "srcgrowth[800]=" << srcgrowth[800] << "srcgrowth[1500]"<< srcgrowth[1500] << endl;
     }
+/*
+Info<<"Dimension1"<< srcNucleation.dimensions() << endl;
+Info<<"Dimension2"<< srcCoagulation.dimensions() << endl;
+Info<<"Dimension3"<< srcgrowth.dimensions() << endl;
+Info<<"Dimension4"<< phiAir.dimensions() << endl;
+Info<<"Dimension5"<< Nk.dimensions() << endl;
+*/
+
 
     solve
         (
          fvm::div(phiAir, Nk, "div(phi,n)")
+         + fvm::Sp(rho * coagterm2, Nk)
          - rho * srcCoagulation
          - rho * srcNucleation
          - rho * srcgrowth,
          mesh.solver("nPart")
         );
     Nk.max(Foam::doubleScalarSMALL);
+   
 }
-}
+    forAll(srcMonoPlus, cellI) {
+        srcMonoPlus[cellI] = t1Plus[cellI] + t2Plus[cellI] + t3Plus[cellI] + t4Plus[cellI];
+    }
+    
+    if (monomerBal)
+    {
+        volScalarField N1old = N1;
+        fvScalarMatrix monoBalEqn(
+                fvm::div(phiAir,N1,"div(phi,n)")
+                - fvm::Sp(rho * srcMonoNuc, N1)
+ //               - rho * srcMonoPlus
+                );
+        monoBalEqn.relax(0.99);
+        monoBalEqn.solve(mesh.solver("nIonsN"));
+
+    }
+    
+    Info<<"N1"<< N1<< nl<<endl;
+    scalar sumOfVolumes = 0;
+    scalar sumOfVolumes2 = 0;
+    for (label i=0; i<node; i++) {
+        sumOfVolumes += vp[i].value() * Nair[i][0];
+        sumOfVolumes2 += vp[i].value() * Nair[i][5000];
+    }
+    Info <<nl<<"sumOfVolumes=" << sumOfVolumes << endl;
+    Info <<nl<<"sumOfVolumes2="<< sumOfVolumes2 << endl;
+    }

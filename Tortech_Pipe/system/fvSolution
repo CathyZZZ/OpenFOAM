@@ -33,6 +33,15 @@ solvers
           relTol          0; 
     }   
 */
+    nIonsN
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-09;
+        relTol          0.0;
+        minIter         1;
+        maxIter         700;
+    }
     nPart
     {
         solver          PBiCG;

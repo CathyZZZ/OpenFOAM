@@ -25,7 +25,7 @@ R                 R     [ 0 2 -2 -1 0 0 0]  8314;
 //******************************Parameter*************************************//
 dpDisp      dpDisp [0 1 0 0 0 0 0]     90e-9; //inlet particle size of dispersed phase
 NpDisp      NpDisp [0 -3 0 0 0 0 0]     0; //1e10; //inlet particle size of dispersed phase
-nodes       nodes [0 0 0 0 0 0 0]       21; ////number of nodes
+nodes       nodes [0 0 0 0 0 0 0]       41; ////number of nodes
 
 MWDisp      MWDisp [1 0 0 0 -1 0 0]     0.026981539; //molecular weight (t.b.d. loop up values of HC)
 rhoDisp     rhoDisp [1 -3 0 0 0 0 0]     2700;
@@ -37,8 +37,8 @@ dimCorr     dimCorr [0 3 -1 0 0 0 0]    1; //dimension correction factor gamma
 
 
 //********************************Setting*************************************//
-nucleation         false;  // activate nucleation
+nucleation         true;  // activate nucleation
 growth             false;//     true;  // activate evaporation/condensation
 coagulation        true;//     true;  // activate coagulation
-monomerBal         false;  // activate monomer balance
+monomerBal         true;  // activate monomer balance
 // ************************************************************************* //
