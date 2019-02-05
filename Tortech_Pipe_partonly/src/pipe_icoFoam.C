@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
 
         // Momentum predictor
 //        #include "createFields.H"
-          #include "solveMomentum.H"
-          #include "solveEnergy.H"
+ //         #include "solveMomentum.H"
+ //         #include "solveEnergy.H"
 //          #include "solveMomentum.H"
-         #include "solvefn_ofT.H"
+ //        #include "solvefn_ofT.H"
  //       Info <<" QQQQQQQQQQQQQ"<< endl;
- //        #include "solveAirScalars.H" 
+         #include "solveAirScalars.H" 
    //     Info <<"wwwwwwwwww"<< endl;
  //        #include "solveFlux.H"
         runTime.write();

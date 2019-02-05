@@ -5,13 +5,7 @@
    
         forAll(dp, i) {
         Info << "diameter for node " << i << " " << Nair[i][0] << " = " << dp[i].value() << " " <<endl;
-
 }
- forAll(vp, i) {
-             Info << "volume for node " << i << "at cell=5000 " << Nair[i][5000] << " = " << vp[i].value() << " " <<endl;
-
- }
-
 /*forAll(Nair[0], cellI) {
     Info << Nair[0][cellI]<< nl<<endl;
 }

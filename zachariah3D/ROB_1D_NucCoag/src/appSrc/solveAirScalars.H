@@ -222,6 +222,7 @@ forAll(N1, cellI) {
 			{
 				for (label i = 1; i < node; i++) {
 					coagterm2[cellI] += Ngamma[k][i][cellI]*Nair[i][cellI];
+                   
 					if (i==k)
 					coagterm2[cellI] += Ngamma[k][i][cellI]*Nair[i][cellI];
 					for (label j = 1; j <= k; j++) {
@@ -237,7 +238,8 @@ forAll(N1, cellI) {
 			{
 				srcCoagulation[cellI] = coagterm1[cellI];
 			}
-
+            Info <<"coagterm2"<<coagterm2[5000] << endl;
+            Info << "coagterm1"<< coagterm1[5000] << endl;
             Info <<"srccoagulationn[5000]"<< srcCoagulation[5000]<< endl;
 		}
 /*Info<<"Dimension4"<< phiAir.dimensions()<< endl;

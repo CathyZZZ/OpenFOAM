@@ -508,7 +508,7 @@ volScalarField rho
   "rho",
   runTime.timeName(),
   mesh,
-  IOobject::READ_IF_PRESENT,
+  IOobject::MUST_READ,
   IOobject::AUTO_WRITE
   ),
 mesh
@@ -543,7 +543,7 @@ surfaceScalarField phiAir
   "phiAir",
   runTime.timeName(),
   mesh,
-  IOobject::READ_IF_PRESENT,
+  IOobject::MUST_READ,
   IOobject::AUTO_WRITE
   ),
  linearInterpolate(rho*Uair) & mesh.Sf()
