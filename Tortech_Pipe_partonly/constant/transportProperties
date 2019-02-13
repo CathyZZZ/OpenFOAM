@@ -40,5 +40,5 @@ dimCorr     dimCorr [0 3 -1 0 0 0 0]    1; //dimension correction factor gamma
 nucleation         false;  // activate nucleation
 growth             false;//     true;  // activate evaporation/condensation
 coagulation        true;//     true;  // activate coagulation
-monomerBal         true;  // activate monomer balance
+monomerBal         false;  // activate monomer balance
 // ************************************************************************* //

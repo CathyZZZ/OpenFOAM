@@ -198,8 +198,96 @@ for (label i=0; i<=nodes.value(); i++) {
               )
             );
 }
+PtrList<volScalarField> Nairold(nodes.value()+1);
+for (label i=0; i<=nodes.value(); i++) {
+    
+    char rnOldPart[16];
+    sprintf (rnOldPart, "nPartNode%d", i);
+    Nairold.set( i, 
+              new volScalarField
+              (
+                IOobject
+                (
+                    rnOldPart,
+                    runTime.timeName(),
+                    mesh,
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                mesh,
+                dimensionedScalar(rnOldPart, dimensionSet(0,-3,0,0,0,0,0), 0.0),
+                zeroGradientFvPatchScalarField::typeName
+              )
+            );
+}
 
+/*
+PtrList<volScalarField> srccoagulation(nodes.value()+1);
+    for (label i=0; i<=nodes.value(); i++) {
+        char rcoag[16];
+        sprintf(rcoag,"rcoagNode%d", i); 
+        srccoagulation.set(i,
+                           new volScalarField
+                           (
+                            IOobject
+                            (
+                             rcoag,
+                             runTime.timeName(),
+                             mesh,
+                             IOobject::NO_READ,
+                             IOobject::AUTO_WRITE
+                            ),
+                            mesh,
+                            dimensionedScalar(rcoag, dimensionSet(0,-3,-1,0,0,0,0), 0.0),
+                            zeroGradientFvPatchScalarField::typeName    
+                )
+                );
+    }
 
+PtrList<volScalarField> coagterm1(nodes.value()+1);
+    for (label i=0; i<=nodes.value(); i++) {
+        char rcoagterm1[16];
+        sprintf(rcoagterm1,"rcoagterm1Node%d", i); 
+        srccoagulation.set(i,
+                           new volScalarField
+                           (
+                            IOobject
+                            (
+                             rcoagterm1,
+                             runTime.timeName(),
+                             mesh,
+                             IOobject::NO_READ,
+                             IOobject::AUTO_WRITE
+                            ),
+                            mesh,
+                            dimensionedScalar(rcoagterm1, dimensionSet(0,-3,-1,0,0,0,0), 0.0),
+                            zeroGradientFvPatchScalarField::typeName    
+                )
+                );
+    }
+
+PtrList<volScalarField> coagterm2(nodes.value()+1);
+    for (label i=0; i<=nodes.value(); i++) {
+        char rcoagterm2[16];
+        sprintf(rcoagterm2,"rcoagterm2Node%d", i); 
+        srccoagulation.set(i,
+                           new volScalarField
+                           (
+                            IOobject
+                            (
+                             rcoagterm2,
+                             runTime.timeName(),
+                             mesh,
+                             IOobject::NO_READ,
+                             IOobject::AUTO_WRITE
+                            ),
+                            mesh,
+                            dimensionedScalar(rcoagterm2, dimensionSet(0,0,-1,0,0,0,0), 0.0),
+                            zeroGradientFvPatchScalarField::typeName    
+                )
+                );
+    }
+*/
 PtrList<volScalarField> NSatk(nodes.value()+1);
 for (label i = 0; i <= node; i++) {
         char rNSatk[16];

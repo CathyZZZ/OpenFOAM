@@ -142,7 +142,13 @@ volScalarField t3Plus = 0.0 * Jk;
 volScalarField t4Plus = 0.0 * Jk;
 
 
+for (label k = 1; k<node; k++) {
+    forAll(Nair[k], cellI) {
+        Nairold[k][cellI] = Nair[k][cellI];
+    }
+}
 //SOURCE TERM CALCULATION
+
 for (label k = 1; k<node; k++) {
     volScalarField& Nk = Nair[k];
     volScalarField srcCoagulation = 0.0 *Jk;
@@ -176,9 +182,9 @@ for (label k = 1; k<node; k++) {
     if (coagulation) {
         forAll (Nk, cellI) {
             for ( label i=1; i < node; i++) {
-                coagterm2[cellI] += Beta[k][i][cellI] * Nair[i][cellI];
-                for ( label j=1; j < node; j++) {
-                coagterm1[cellI] += Xijk[k][j][i].value() * Beta[j][i][cellI] * Nair[i][cellI] * Nair[j][cellI];
+                coagterm2[cellI] += Beta[k][i][cellI] * Nairold[i][cellI];
+                for ( label j=1; j <=k; j++) {
+                coagterm1[cellI] += Xijk[k][j][i].value() * Beta[j][i][cellI] * Nairold[i][cellI] * Nairold[j][cellI];
                
                 }
             }
@@ -242,6 +248,7 @@ Info<<"Dimension5"<< Nk.dimensions() << endl;
 */
 
 
+
     solve
         (
          fvm::div(phiAir, Nk, "div(phi,n)")
@@ -252,9 +259,9 @@ Info<<"Dimension5"<< Nk.dimensions() << endl;
          mesh.solver("nPart")
         );
     Nk.max(Foam::doubleScalarSMALL);
-
-
 }
+
+
  
     forAll(srcMonoPlus, cellI) {
         srcMonoPlus[cellI] = t1Plus[cellI] + t2Plus[cellI] + t3Plus[cellI] + t4Plus[cellI];
