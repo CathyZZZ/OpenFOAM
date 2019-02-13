@@ -183,6 +183,8 @@ for (label k = 1; k<node; k++) {
         forAll (Nk, cellI) {
             for ( label i=1; i < node; i++) {
                 coagterm2[cellI] += Beta[k][i][cellI] * Nairold[i][cellI];
+                if (i==k)
+                    coagterm2[cellI] += Beta[k][i][cellI] * Nairold[i][cellI];
                 for ( label j=1; j <=k; j++) {
                 coagterm1[cellI] += Xijk[k][j][i].value() * Beta[j][i][cellI] * Nairold[i][cellI] * Nairold[j][cellI];
                
