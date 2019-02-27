@@ -190,7 +190,7 @@ for (label i=0; i<=nodes.value(); i++) {
                     runTime.timeName(),
                     mesh,
                     IOobject::NO_READ,
-                    IOobject::NO_WRITE
+                    IOobject::AUTO_WRITE
                 ),
                 mesh,
                 dimensionedScalar(rnPart, dimensionSet(0,-3,0,0,0,0,0), 0.0),
